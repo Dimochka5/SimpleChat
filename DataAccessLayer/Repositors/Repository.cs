@@ -3,24 +3,29 @@ using DataAccessLayer.Data;
 using DataAccessLayer.Models;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
 
 namespace DataAccessLayer.Repositors
 {
-    public class MessageRepository:IRepository<Message>
+    public class Repository<T> : IRepository<T> where T : class,IEntity
     {
         private readonly SimpleChatDbContext _chatDbContext;
         private readonly ILogger _logger;
-        public MessageRepository(ILogger<User> logger)
+        public Repository(ILogger<T> logger)
         {
             _logger = logger;
         }
-        public async Task<Message> Create(Message newMessage)
+        public async Task<T> Create(T _object)
         {
             try
             {
-                if (newMessage != null)
+                if (_object != null)
                 {
-                    var obj = _chatDbContext.Add<Message>(newMessage);
+                    var obj = _chatDbContext.Add<T>(_object);
                     await _chatDbContext.SaveChangesAsync();
                     return obj.Entity;
                 }
@@ -35,13 +40,13 @@ namespace DataAccessLayer.Repositors
             }
         }
 
-        public async Task Delete(Message message)
+        public async Task Delete(T _object)
         {
             try
             {
-                if (message != null)
+                if (_object != null)
                 {
-                    var obj = _chatDbContext.Remove(message);
+                    var obj = _chatDbContext.Remove(_object);
                     if (obj != null)
                     {
                         await _chatDbContext.SaveChangesAsync();
@@ -54,14 +59,14 @@ namespace DataAccessLayer.Repositors
             }
         }
 
-        public List<Message> GetAll()
+        public List<T> GetAll()
         {
             try
             {
-                var messages = _chatDbContext.Messages.ToList();
-                if (messages != null)
+                var chats = _chatDbContext.Set<T>().ToList();
+                if (chats != null)
                 {
-                    return messages;
+                    return chats;
                 }
                 else
                 {
@@ -74,16 +79,16 @@ namespace DataAccessLayer.Repositors
             }
         }
 
-        public Task<Message> GetById(int id)
+        public Task<T> GetById(int id)
         {
             try
             {
                 if (id != null)
                 {
-                    var message = _chatDbContext.Messages.FirstOrDefaultAsync(message => message.Id == id);
-                    if (message != null)
+                    var chat = _chatDbContext.Set<T>().FirstOrDefaultAsync(t=>t.Id==id);
+                    if (chat != null)
                     {
-                        return message;
+                        return chat;
                     }
                     else
                     {
@@ -101,13 +106,13 @@ namespace DataAccessLayer.Repositors
             }
         }
 
-        public void Update(Message message)
+        public void Update(T _object)
         {
             try
             {
-                if (message != null)
+                if (_object != null)
                 {
-                    var isUpdate = _chatDbContext.Update(message);
+                    var isUpdate = _chatDbContext.Update(_object);
                     if (isUpdate != null)
                     {
                         _chatDbContext.SaveChangesAsync();

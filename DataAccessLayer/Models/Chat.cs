@@ -1,6 +1,6 @@
 ﻿namespace DataAccessLayer.Models
 {
-    public class Chat
+    public class Chat:IEntity
     {
         public int Id { get; set; }
 
