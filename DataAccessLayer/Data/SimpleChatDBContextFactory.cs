@@ -3,7 +3,7 @@ using Microsoft.EntityFrameworkCore.Design;
 
 namespace DataAccessLayer.Data
 {
-    public class SimpleChatDBContextFactory: IDesignTimeDbContextFactory<SimpleChatDbContext>
+    public class SimpleChatDBContextFactory : IDesignTimeDbContextFactory<SimpleChatDbContext>
     {
         public SimpleChatDbContext CreateDbContext(string[] args)
         {

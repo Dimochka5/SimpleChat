@@ -5,12 +5,12 @@ using Microsoft.AspNetCore.Mvc;
 namespace PresentationLayer.Controllers
 {
     [ApiController]
-    [Route("user")]
-    public class UserController : Controller
+    [Route("message")]
+    public class MessageController : Controller
     {
-        private readonly IService<User> _service;
+        private readonly IService<Message> _service;
 
-        public UserController(IService<User> service)
+        public MessageController(IService<Message> service)
         {
             _service = service;
         }
@@ -23,10 +23,10 @@ namespace PresentationLayer.Controllers
         }
 
         [HttpPost("create")]
-        public IActionResult Create([FromBody] string name)
+        public IActionResult Create([FromBody] string text)
         {
-            User user = new User() { Name = name };
-            _service.Create(user);
+            Message message = new Message() { Text = text };
+            _service.Create(message);
             return View();
         }
         [HttpPost("delete")]
@@ -42,10 +42,10 @@ namespace PresentationLayer.Controllers
             return View(user);
         }
         [HttpPost("update")]
-        public IActionResult Update([FromBody] int id, string name)
+        public IActionResult Update([FromBody] int id, string text)
         {
-            User updateUser = new User() { Name = name, Id = id };
-            _service.Update(updateUser);
+            Message updateMessage = new Message() { Text = text, Id = id };
+            _service.Update(updateMessage);
             return View();
         }
     }

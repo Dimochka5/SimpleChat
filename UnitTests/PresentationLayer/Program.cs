@@ -1,11 +1,10 @@
-using DataAccessLayer.Data;
-using DataAccessLayer.Repositors;
-using DataAccessLayer.Contacts;
 using BusinessAccessLayer.Services;
-using BusinessAccessLayer.SignalR;
-using Microsoft.EntityFrameworkCore;
 using BusinessAccessLayer.Services.Contracts;
+using DataAccessLayer.Contacts;
+using DataAccessLayer.Data;
 using DataAccessLayer.Models;
+using DataAccessLayer.Repositors;
+using Microsoft.EntityFrameworkCore;
 
 var builder = WebApplication.CreateBuilder(args);
 

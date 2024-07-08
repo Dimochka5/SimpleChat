@@ -4,13 +4,11 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace PresentationLayer.Controllers
 {
-    [ApiController]
-    [Route("user")]
-    public class UserController : Controller
+    public class ChatController : Controller
     {
-        private readonly IService<User> _service;
+        private readonly IService<Chat> _service;
 
-        public UserController(IService<User> service)
+        public ChatController(IService<Chat> service)
         {
             _service = service;
         }
@@ -25,8 +23,8 @@ namespace PresentationLayer.Controllers
         [HttpPost("create")]
         public IActionResult Create([FromBody] string name)
         {
-            User user = new User() { Name = name };
-            _service.Create(user);
+            Chat chat = new Chat() { Name = name };
+            _service.Create(chat);
             return View();
         }
         [HttpPost("delete")]
@@ -44,8 +42,8 @@ namespace PresentationLayer.Controllers
         [HttpPost("update")]
         public IActionResult Update([FromBody] int id, string name)
         {
-            User updateUser = new User() { Name = name, Id = id };
-            _service.Update(updateUser);
+            Chat updateChat = new Chat() { Name = name, Id = id };
+            _service.Update(updateChat);
             return View();
         }
     }

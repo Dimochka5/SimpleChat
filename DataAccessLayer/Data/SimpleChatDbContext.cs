@@ -3,7 +3,7 @@ using Microsoft.EntityFrameworkCore;
 
 namespace DataAccessLayer.Data
 {
-    public class SimpleChatDbContext:DbContext
+    public class SimpleChatDbContext : DbContext
     {
         public SimpleChatDbContext(DbContextOptions<SimpleChatDbContext> options)
         : base(options)

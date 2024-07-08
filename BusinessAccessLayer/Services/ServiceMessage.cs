@@ -1,15 +1,10 @@
 ﻿using BusinessAccessLayer.Services.Contracts;
 using DataAccessLayer.Contacts;
 using DataAccessLayer.Models;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace BusinessAccessLayer.Services
 {
-    public class ServiceMessage:IService<Message>
+    public class ServiceMessage : IService<Message>
     {
 
         public readonly IRepository<Message> _repository;
@@ -17,7 +12,7 @@ namespace BusinessAccessLayer.Services
         {
             _repository = repository;
         }
-        public async Task<Message> Create(Message newMessage)
+        public Message Create(Message newMessage)
         {
             try
             {
@@ -27,7 +22,7 @@ namespace BusinessAccessLayer.Services
                 }
                 else
                 {
-                    return await _repository.Create(newMessage);
+                    return _repository.Create(newMessage);
                 }
             }
             catch (Exception)
@@ -53,13 +48,13 @@ namespace BusinessAccessLayer.Services
                 throw;
             }
         }
-        public void Update(int Id)
+        public void Update(Message updateMessage)
         {
             try
             {
-                if (Id != 0)
+                if (updateMessage.Id != 0)
                 {
-                    var message = _repository.GetAll().Where(message => message.Id == Id).FirstOrDefault();
+                    var message = _repository.GetAll().Where(message => message.Id == updateMessage.Id).FirstOrDefault();
                     if (message != null)
                     {
                         _repository.Update(message);
@@ -76,6 +71,17 @@ namespace BusinessAccessLayer.Services
             try
             {
                 return _repository.GetAll().ToList();
+            }
+            catch (Exception)
+            {
+                throw;
+            }
+        }
+        public Message GetById(int id)
+        {
+            try
+            {
+                return _repository.GetById(id);
             }
             catch (Exception)
             {

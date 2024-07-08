@@ -1,22 +1,19 @@
 ﻿using BusinessAccessLayer.Services.Contracts;
 using DataAccessLayer.Contacts;
 using DataAccessLayer.Models;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace BusinessAccessLayer.Services
 {
-    public class ServiceChat:IService<Chat>
+    public class ServiceChat : IService<Chat>
     {
         public readonly IRepository<Chat> _repository;
-        public ServiceChat(IRepository<Chat> repository)
+        public readonly IRepository<UserInChat> _userInChatRepository;
+        public ServiceChat(IRepository<Chat> repository, IRepository<UserInChat> userInChatRepository)
         {
             _repository = repository;
+            _userInChatRepository = userInChatRepository;
         }
-        public async Task<Chat> Create(Chat newChat)
+        public Chat Create(Chat newChat)
         {
             try
             {
@@ -26,7 +23,17 @@ namespace BusinessAccessLayer.Services
                 }
                 else
                 {
-                    return await _repository.Create(newChat);
+                    if (!String.IsNullOrEmpty(newChat.Name))
+                    {
+                        var chat = _repository.Create(newChat);
+                        UserInChat userInChat = new UserInChat() { Chat = chat, IsAdmin = true };
+                        _userInChatRepository.Create(userInChat);
+                        return chat;
+                    }
+                    else
+                    {
+                        return null;
+                    }
                 }
             }
             catch (Exception)
@@ -52,13 +59,13 @@ namespace BusinessAccessLayer.Services
                 throw;
             }
         }
-        public void Update(int Id)
+        public void Update(Chat updateChat)
         {
             try
             {
-                if (Id != 0)
+                if (updateChat.Id != 0)
                 {
-                    var chat = _repository.GetAll().Where(chat=>chat.Id==Id).FirstOrDefault();
+                    var chat = _repository.GetAll().Where(chat => chat.Id == updateChat.Id).FirstOrDefault();
                     if (chat != null)
                     {
                         _repository.Update(chat);
@@ -75,6 +82,18 @@ namespace BusinessAccessLayer.Services
             try
             {
                 return _repository.GetAll().ToList();
+            }
+            catch (Exception)
+            {
+                throw;
+            }
+        }
+
+        public Chat GetById(int id)
+        {
+            try
+            {
+                return _repository.GetById(id);
             }
             catch (Exception)
             {
